@@ -23,12 +23,12 @@ namespace EntityCounter
 
             ed.WriteMessage("\n--- ENTITY COUNTER ---");
 
-            // 🔹 STEP 1: Select reference entity
+            //  STEP 1: Select reference entity
             PromptEntityOptions refOpt = new PromptEntityOptions("\nSelect reference entity: ");
             PromptEntityResult refRes = ed.GetEntity(refOpt);
             if (refRes.Status != PromptStatus.OK) return;
 
-            // 🔹 STEP 2: Select objects
+            //  STEP 2: Select objects
             PromptSelectionResult selRes = ed.GetSelection();
             if (selRes.Status != PromptStatus.OK)
             {
@@ -36,7 +36,7 @@ namespace EntityCounter
                 return;
             }
 
-            // 🔹 STEP 3: User input (row height)
+            //  STEP 3: User input (row height)
             PromptDoubleOptions rowOpt = new PromptDoubleOptions("\nEnter row height: ");
             rowOpt.AllowNegative = false;
             rowOpt.AllowZero = false;
@@ -45,7 +45,7 @@ namespace EntityCounter
             PromptDoubleResult rowRes = ed.GetDouble(rowOpt);
             if (rowRes.Status != PromptStatus.OK) return;
 
-            // 🔹 STEP 3: User input (column width)
+            //  STEP 3: User input (column width)
             PromptDoubleOptions colOpt = new PromptDoubleOptions("\nEnter column width: ");
             colOpt.AllowNegative = false;
             colOpt.AllowZero = false;
@@ -54,7 +54,7 @@ namespace EntityCounter
             PromptDoubleResult colRes = ed.GetDouble(colOpt);
             if (colRes.Status != PromptStatus.OK) return;
 
-            // 🔹 STEP 4: Insertion point
+            //  STEP 4: Insertion point
             PromptPointResult ptRes = ed.GetPoint("\nSelect insertion point: ");
             if (ptRes.Status != PromptStatus.OK) return;
 
@@ -79,7 +79,7 @@ namespace EntityCounter
                             counts.Add(key, 1);
                     }
 
-                    // 🔥 CREATE TABLE
+                    //  CREATE TABLE
                     CreateTable(db, tr, counts, ptRes.Value, rowRes.Value, colRes.Value);
 
                     ed.WriteMessage("\nTable created successfully.");
@@ -93,7 +93,7 @@ namespace EntityCounter
             }
         }
 
-        // 🔹 Get key
+        //  Get key
         private string GetKey(Entity ent, Transaction tr)
         {
             if (ent is BlockReference br)
@@ -102,7 +102,7 @@ namespace EntityCounter
             return ent.GetType().Name.ToUpper();
         }
 
-        // 🔹 Get block name
+        //  Get block name
         private string GetBlockName(BlockReference br, Transaction tr)
         {
             try
@@ -124,7 +124,7 @@ namespace EntityCounter
             }
         }
 
-        // 🔥 CREATE TABLE WITH USER SIZE
+        //  CREATE TABLE WITH USER SIZE
         private void CreateTable(Database db, Transaction tr,
             Dictionary<string, int> data, Point3d pt,
             double rowHeight, double colWidth)
@@ -147,19 +147,19 @@ namespace EntityCounter
 
             tb.Cells.TextHeight = rowHeight / 2;
 
-            // 🔹 Title
+            // Title
             tb.Cells[0, 0].TextString = "ENTITY COUNT";
             tb.MergeCells(CellRange.Create(tb, 0, 0, 0, 1));
             tb.Cells[0, 0].Alignment = CellAlignment.MiddleCenter;
 
-            // 🔹 Headers
+            //  Headers
             tb.Cells[1, 0].TextString = "Entity";
             tb.Cells[1, 1].TextString = "Count";
 
             tb.Cells[1, 0].Alignment = CellAlignment.MiddleCenter;
             tb.Cells[1, 1].Alignment = CellAlignment.MiddleCenter;
 
-            // 🔹 Data
+            //  Data
             int row = 2;
             foreach (var item in data)
             {
